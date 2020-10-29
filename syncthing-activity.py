@@ -39,7 +39,7 @@ def process(array, pat=None):
             folder_label = folders[folder_id]["label"]
             folder_path = folders[folder_id]["path"]
 
-            path = os.path.join(folder_path, event["data"]["completion"])
+            path = os.path.join(folder_path, event["data"])
 
             e = {
                 "time"          : event["time"],
