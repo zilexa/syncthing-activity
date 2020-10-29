@@ -40,8 +40,8 @@ def process(array, pat=None):
                 "type"          : event["type"],
                 "completion"    : event["data"]["completion"],
                 "device"        : event["data"]["device"],
-                "deviceName"    : event["data"]["deviceName"]
-                "folder"        : event["data"["folder"]
+                "deviceName"    : event["data"]["deviceName"],
+                "folder"        : event["data"["folder"],
             }
 
             # print(json.dumps(e, indent=4))
