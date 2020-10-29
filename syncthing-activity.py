@@ -35,20 +35,16 @@ def process(array, pat=None):
         if "type" in event and event["type"] == "FolderCompletion":
             last_id = event["id"]
 
-            folder_id = event["data"]["folder"]
-            folder_label = folders[folder_id]["label"]
-            folder_path = folders[folder_id]["path"]
             e = {
                 "time"          : event["time"],
                 "completion"    : event["data"]["completion"],
                 "device"        : event["data"]["device"],
-                "folder"        : event["data"]["folder"],
+                "deviceName"    : event["data"]["deviceName"]
                 "folder_label"  : folder_label,
-                "folder_id"     : folder_id,
             }
 
             # print(json.dumps(e, indent=4))
-            print("{time:>15} {device:>15} {folder_label:>15}".format(**e))
+            print("{time:>15} {device:>15} {deviceName:>15} {folder_label:>15}".format(**e))
 
 def main(url, apikey, pat):
     headers = { "X-API-Key" : apikey }
