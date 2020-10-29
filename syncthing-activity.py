@@ -38,9 +38,6 @@ def process(array, pat=None):
             folder_id = event["data"]["folder"]
             folder_label = folders[folder_id]["label"]
             folder_path = folders[folder_id]["path"]
-
-            path = os.path.join(folder_path, event["data"])
-
             e = {
                 "time"          : event["time"],
                 "completion"    : event["data"]["completion"],
@@ -48,16 +45,10 @@ def process(array, pat=None):
                 "folder"        : event["data"]["folder"],
                 "folder_label"  : folder_label,
                 "folder_id"     : folder_id,
-                "path"          : path,
             }
-            print("hello1")
-            if pat:
-                s = "{folder_label} {path}".format(**e)
-                if not re.search(pat, s):
-                    continue
 
             # print(json.dumps(e, indent=4))
-            print("{folder_label:>15} {type:<5s} {device:>15} {completion:100}".format(**e))
+            print("{folder:>15} {type:<5s} {device:>15} {completion:100}".format(**e))
 
 def main(url, apikey, pat):
     headers = { "X-API-Key" : apikey }
@@ -69,7 +60,7 @@ def main(url, apikey, pat):
 
         params = {
             "since" : last_id,
-            "limit" : None,
+            "limit" : 1,
             "events" : "FolderCompletion",
         }
 
