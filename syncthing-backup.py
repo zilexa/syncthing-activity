@@ -8,9 +8,9 @@ import os
 import re
 import logging
 
-__original_author__    = "Jan-Piet Mens"
-__license__            = "GNU General Public License"
-__forked_by__          = "Zilexa"
+__author__    = "Jan-Piet Mens <jp@mens.de>"
+__copyright__ = "Copyright 2019 Jan-Piet Mens"
+__license__   = "GNU General Public License"
 
 last_id = 0
 folders = {}
@@ -56,11 +56,12 @@ def process(array, pat=None):
                 s = "{folder_label}".format(**e)
                 if not re.search(pat, s):
                     continue
-                    
-            # Action here
-            logging.basicConfig(level=logging.DEBUG, filename="loggerfile", filemode="a+",
-                        format="%(asctime)-15s %(levelname)-8s %(message)s")
-            logging.info("{time:>20} {type:>10} {action:>10} {folder_label:>15} {path:>50}".format(**e))
+            if event["data"]["action"] == "update":
+            # print(json.dumps(e, indent=4))
+           # print("{time:>20} {type:>10} {action:>5} {error:>5} {folder_label:>15} {path:>15}".format(**e))
+              logging.basicConfig(level=logging.DEBUG, filename="syncthing-backup.log", filemode="a+",
+                          format="%(asctime)-15s %(levelname)-8s %(message)s")
+              logging.info("{time:>20} {type:>10} {action:>10} {folder_label:>15} {path:>50}".format(**e))
 
 def main(url, apikey, pat):
     headers = { "X-API-Key" : apikey }
