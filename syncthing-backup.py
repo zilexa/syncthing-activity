@@ -6,11 +6,11 @@ import json
 import sys
 import os
 import re
+import logging
 
-__forked_by__          = "ZileXa"
-__original_author__    = "Jan-Piet Mens"
-__copyright__          = "Copyright 2019 Jan-Piet Mens"
-__license__            = "GNU General Public License"
+__author__    = "Jan-Piet Mens <jp@mens.de>"
+__copyright__ = "Copyright 2019 Jan-Piet Mens"
+__license__   = "GNU General Public License"
 
 last_id = 0
 folders = {}
@@ -51,8 +51,10 @@ def process(array, pat=None):
                 if not re.search(pat, s):
                     continue
                     
-            # print(json.dumps(e, indent=4))
-            print("{time:>20} {type:>10} {completion:>5} {device:>15} {folder_label:>15}".format(**e))
+            # print to logfile
+            logging.basicConfig(level=logging.DEBUG, filename="syncthing-backup.log", filemode="a+",
+                        format="%(asctime)-15s %(levelname)-8s %(message)s")
+            logging.info("{time:>20} {type:>10} {completion:>5} {device:>15} {folder_label:>15}".format(**e))
 
 def main(url, apikey, pat):
     headers = { "X-API-Key" : apikey }
