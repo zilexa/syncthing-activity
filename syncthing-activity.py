@@ -50,7 +50,7 @@ def process(array, pat=None):
                 "folder_id"     : folder_id,
                 "path"          : path,
             }
-
+            print("hello1")
             if pat:
                 s = "{folder_label} {path}".format(**e)
                 if not re.search(pat, s):
