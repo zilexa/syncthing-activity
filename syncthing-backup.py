@@ -61,7 +61,7 @@ def process(array, pat=None):
                     continue
                     
             # Continue if it this event is a successful file update operation.
-            if event["data"]["action"] == "update" and event["data"]["error"]=="null":
+            if event["data"]["action"] == "update" and event["data"]["error"]==None:
 
               # Perform actions (log to file, rsync && mv)
               logging.basicConfig(level=logging.DEBUG, filename="syncthing-backup.log", filemode="a+",
