@@ -1,7 +1,7 @@
 # syncthing-backup
 
 This small program uses [Syncthing](https://syncthing.net)'s [REST
-API](https://docs.syncthing.net/dev/rest.html) backup files incrementally each time local SyncThing has finished syncing a folder. (No worries: the API is queried on
+API](https://docs.syncthing.net/dev/rest.html) to backup files incrementally each time local SyncThing has finished syncing a folder. (No worries: the API is queried on
 the machine on which you run `syncthing-activity`.)
 
 
