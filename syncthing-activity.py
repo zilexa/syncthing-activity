@@ -21,7 +21,6 @@ def getfolders(data):
     for f in data['folders']:
         folders[f["id"]] = {
             "label" : f["label"],
-            "path"  : f["path"],
         }
 
 def process(array, pat=None):
@@ -34,17 +33,25 @@ def process(array, pat=None):
     for event in array:
         if "type" in event and event["type"] == "FolderCompletion":
             last_id = event["id"]
-
+            
+            folder_label = folders[folder_id]["label"]
+            
             e = {
                 "time"          : event["time"],
                 "type"          : event["type"],
                 "completion"    : event["data"]["completion"],
                 "device"        : event["data"]["device"],
                 "folder"        : event["data"]["folder"],
+                "folder_label"  : folder_label,
             }
-
+            
+            if pat:
+                s = "{folder_label}".format(**e)
+                if not re.search(pat, s):
+                    continue
+                    
             # print(json.dumps(e, indent=4))
-            print("{time:>15} {device:>15} {device:>15} {folder:>15}".format(**e))
+            print("{time:>15} {device:>15} {folder_label:>15}".format(**e))
 
 def main(url, apikey, pat):
     headers = { "X-API-Key" : apikey }
