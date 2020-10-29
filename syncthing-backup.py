@@ -8,9 +8,9 @@ import os
 import re
 import logging
 
-__author__    = "Jan-Piet Mens <jp@mens.de>"
-__copyright__ = "Copyright 2019 Jan-Piet Mens"
-__license__   = "GNU General Public License"
+__original_author__    = "Jan-Piet Mens"
+__license__            = "GNU General Public License"
+__forked_by__          = "Zilexa"
 
 last_id = 0
 folders = {}
