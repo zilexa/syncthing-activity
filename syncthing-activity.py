@@ -40,12 +40,11 @@ def process(array, pat=None):
                 "type"          : event["type"],
                 "completion"    : event["data"]["completion"],
                 "device"        : event["data"]["device"],
-                "deviceName"    : event["data"]["deviceName"],
                 "folder"        : event["data"]["folder"],
             }
 
             # print(json.dumps(e, indent=4))
-            print("{time:>15} {device:>15} {deviceName:>15} {folder:>15}".format(**e))
+            print("{time:>15} {device:>15} {device:>15} {folder:>15}".format(**e))
 
 def main(url, apikey, pat):
     headers = { "X-API-Key" : apikey }
