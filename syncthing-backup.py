@@ -8,8 +8,9 @@ import os
 import re
 import logging
 
-__author__    = "Jan-Piet Mens <jp@mens.de>"
-__copyright__ = "Copyright 2019 Jan-Piet Mens"
+__forked_by__ = "Zilexa"
+__original_author__    = "Jan-Piet Mens"
+__copyright__ = "Copyright 2019"
 __license__   = "GNU General Public License"
 
 last_id = 0
@@ -42,7 +43,7 @@ def process(array, pat=None):
             folder_path = folders[folder_id]["path"]
             
             # Create a variable with path+filename
-            path = os.path.join(folder_path, event["data"]["item"])
+            file_path = os.path.join(folder_path, event["data"]["item"])
 
             e = {
                 "time"          : event["time"],
@@ -51,7 +52,8 @@ def process(array, pat=None):
                 "error"         : event["data"]["error"],
                 "item"          : event["data"]["item"],
                 "folder_label"  : folder_label,
-                "path"          : path,
+                "folder_path"   : folder_path,
+                "file_path"          : file_path,
             }
             
             # Probably required to check the attribute used at script execution (for example 'Photos') against folder label.
@@ -63,10 +65,16 @@ def process(array, pat=None):
             # Continue if it this event is a successful file update operation.
             if event["data"]["action"] == "update" and event["data"]["error"]==None:
 
-              # Perform actions (log to file, rsync && mv)
+              # Perform actions (log to file, rsync && mv).
+              # NOT WORKING: (Backup file if source file is newer or does not exist at destination).
+              cp -u --preserve=timestamps "file_path" /mnt/pool/Collections/Pictures/Test/
+              # NOT WORKING Move file to source/archive. 
+              mv "file_path" "folder_path"/archive
+              # Logging
               logging.basicConfig(level=logging.DEBUG, filename="syncthing-backup.log", filemode="a+",
                           format="%(asctime)-15s %(levelname)-8s %(message)s")
-              logging.info("{time:>20} {type:>10} {action:>10} {folder_label:>15} {path:>50}".format(**e))
+              logging.info("{time:>20} {type:>10} {action:>10} {folder_label:>15} {folder_path:>50} {file_path:>50}".format(**e))
+
 
 def main(url, apikey, pat):
     headers = { "X-API-Key" : apikey }
