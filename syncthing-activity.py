@@ -34,7 +34,7 @@ def process(array, pat=None):
         if "type" in event and event["type"] == "FolderCompletion":
             last_id = event["id"]
             
-            folder_label = folders[folder_id]["label"]
+            folder_label = folders["label"]
             
             e = {
                 "time"          : event["time"],
