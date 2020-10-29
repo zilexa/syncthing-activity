@@ -48,7 +48,7 @@ def process(array, pat=None):
             }
 
             # print(json.dumps(e, indent=4))
-            print("{folder:>15} {type:<5s} {device:>15} {completion:100}".format(**e))
+            print("{folder:>15} {device:>15} {completion:100}".format(**e))
 
 def main(url, apikey, pat):
     headers = { "X-API-Key" : apikey }
