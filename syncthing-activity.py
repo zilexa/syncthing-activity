@@ -39,12 +39,13 @@ def process(array, pat=None):
             folder_label = folders[folder_id]["label"]
             folder_path = folders[folder_id]["path"]
 
-            path = os.path.join(folder_path, event["data"]["folder_label"])
+            path = os.path.join(folder_path, event["data"]["completion"])
 
             e = {
                 "time"          : event["time"],
-                "action"        : event["data"]["action"],
-                "type"          : event["data"]["type"],
+                "completion"    : event["data"]["completion"],
+                "device"        : event["data"]["device"],
+                "folder"        : event["data"]["folder"],
                 "folder_label"  : folder_label,
                 "folder_id"     : folder_id,
                 "path"          : path,
@@ -56,7 +57,7 @@ def process(array, pat=None):
                     continue
 
             # print(json.dumps(e, indent=4))
-            print("{folder_label:>15} {type:<5s} {action:<10s}".format(**e))
+            print("{folder_label:>15} {type:<5s} {device:>15} {completion:100}".format(**e))
 
 def main(url, apikey, pat):
     headers = { "X-API-Key" : apikey }
@@ -69,7 +70,7 @@ def main(url, apikey, pat):
         params = {
             "since" : last_id,
             "limit" : None,
-            "events" : "FolderCompletion",
+            "events" : "ItemStarted",
         }
 
         r = requests.get("{0}/rest/events".format(url), headers=headers, params=params)
