@@ -15,6 +15,7 @@ __license__   = "GNU General Public License"
 last_id = 0
 folders = {}
 
+# Get folder label (used later to check against pattern) and folder path (used later to create a full filepath):
 def getfolders(data):
 
     global folders
@@ -24,14 +25,14 @@ def getfolders(data):
             "label" : f["label"],
             "path"  : f["path"],
         }
-
+# Probably required to check the attribute used at script execution (for example 'Photos') against folder label.
 def process(array, pat=None):
     """ process if pattern `pat' (regular expression) can be found in
         folder label or item """
 
     global last_id
 
-
+    # For each event, select ItemFinished event and read its parameters
     for event in array:
         if "type" in event and event["type"] == "ItemFinished":
             last_id = event["id"]
@@ -39,7 +40,8 @@ def process(array, pat=None):
             folder_id = event["data"]["folder"]
             folder_label = folders[folder_id]["label"]
             folder_path = folders[folder_id]["path"]
-
+            
+            # Create a variable with path+filename
             path = os.path.join(folder_path, event["data"]["item"])
 
             e = {
@@ -52,13 +54,16 @@ def process(array, pat=None):
                 "path"          : path,
             }
             
+            # Probably required to check the attribute used at script execution (for example 'Photos') against folder label.
             if pat:
                 s = "{folder_label}".format(**e)
                 if not re.search(pat, s):
                     continue
+                    
+            # Check if this event is about a successful operation (action=update, error=null) 
             if event["data"]["action"] == "update":
-            # print(json.dumps(e, indent=4))
-           # print("{time:>20} {type:>10} {action:>5} {error:>5} {folder_label:>15} {path:>15}".format(**e))
+
+              # Perform actions (log to file, rsync && mv)
               logging.basicConfig(level=logging.DEBUG, filename="syncthing-backup.log", filemode="a+",
                           format="%(asctime)-15s %(levelname)-8s %(message)s")
               logging.info("{time:>20} {type:>10} {action:>10} {folder_label:>15} {path:>50}".format(**e))
