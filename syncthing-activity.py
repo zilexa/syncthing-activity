@@ -7,9 +7,10 @@ import sys
 import os
 import re
 
-__author__    = "Jan-Piet Mens <jp@mens.de>"
-__copyright__ = "Copyright 2019 Jan-Piet Mens"
-__license__   = "GNU General Public License"
+__forked_by__          = "ZileXa"
+__original_author__    = "Jan-Piet Mens"
+__copyright__          = "Copyright 2019 Jan-Piet Mens"
+__license__            = "GNU General Public License"
 
 last_id = 0
 folders = {}
@@ -42,7 +43,6 @@ def process(array, pat=None):
                 "type"          : event["type"],
                 "completion"    : event["data"]["completion"],
                 "device"        : event["data"]["device"],
-                "folder"        : event["data"]["folder"],
                 "folder_label"  : folder_label,
             }
             
@@ -52,7 +52,7 @@ def process(array, pat=None):
                     continue
                     
             # print(json.dumps(e, indent=4))
-            print("{time:>15} {device:>15} {folder_label:>15}".format(**e))
+            print("{time:>20} {type:>10} {completion:>5} {device:>15} {folder_label:>15}".format(**e))
 
 def main(url, apikey, pat):
     headers = { "X-API-Key" : apikey }
