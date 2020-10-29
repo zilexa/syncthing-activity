@@ -70,7 +70,7 @@ def main(url, apikey, pat):
         params = {
             "since" : last_id,
             "limit" : None,
-            "events" : "ItemStarted",
+            "events" : "FolderCompletion",
         }
 
         r = requests.get("{0}/rest/events".format(url), headers=headers, params=params)
