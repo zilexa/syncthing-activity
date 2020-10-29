@@ -60,8 +60,8 @@ def process(array, pat=None):
                 if not re.search(pat, s):
                     continue
                     
-            # Check if this event is about a successful operation (action=update, error=null) 
-            if event["data"]["action"] == "update":
+            # Continue if it this event is a successful file update operation.
+            if event["data"]["action"] == "update" and event["data"]["error"]=="null":
 
               # Perform actions (log to file, rsync && mv)
               logging.basicConfig(level=logging.DEBUG, filename="syncthing-backup.log", filemode="a+",
