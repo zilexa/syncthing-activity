@@ -1,12 +1,13 @@
-# syncthing-activity
+# syncthing-backup
 
 This small program uses [Syncthing](https://syncthing.net)'s [REST
-API](https://docs.syncthing.net/dev/rest.html) to determine the changes
-ocurring on the local instance of Syncthing. (No worries: the API is queried on
+API](https://docs.syncthing.net/dev/rest.html) backup files incrementally each time local SyncThing has finished syncing a folder. (No worries: the API is queried on
 the machine on which you run `syncthing-activity`.)
 
-## apikey
 
+## Requirements
+
+### Get api key 
 Open Syncthing's Web UI at `http://127.0.0.1:8384`, click on _Actions_ and
 _Settings_. On the Settings panel, _General_ tab you'll find the API key on the
 right. Copy that into an environment variable before launching
@@ -16,7 +17,6 @@ right. Copy that into an environment variable before launching
 export SYNCTHING_APIKEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ./syncthing-activity.py
 ```
-
 If your Syncthing is listening on a special URL, you can additionally override
 the default URL:
 
@@ -25,29 +25,28 @@ export SYNCTHING_URL="http://localhost:8384"
 ```
 
 ## usage
+`./syncthing-activity` 
+Run this command to simply monitor all folders and copy new files to the backup location. 
+Additionally files will be moved to the folder/archive subfolder (so that the user knows those files have been backed up and can delete them safely). 
 
-Invoking `syncthing-activity` with a regular expression as parameter will cause
-it to print lines only if the folder label (the name you gave a syncthing
-folder) and the fully qualified path to the item in your file system match that
-expression. This makes it possible to view changes on a particular folder only:
-the raison d'etre of this program: I wanted to see when a friend who shares a
-folder with me added or changed files within that folder.
+`./syncthing-activity photos` 
+Run this command to monitor all Syncthing folders with "photos" in their name and copy new files to the backup location. 
+Additionally files will be moved to the folder/archive subfolder (so that the client device can still use those files, but the user can easily empty the /archive folder if needed). 
+
 
 ## example
 
-The program currently outputs the folder label in which an update is detected,
-the object (file or directory) and type of update as well as the object's name:
+The family runs Syncthing-fork on their Android phones. 
+The folders /Pictures are being synced to a home NAS/PC. 
+On that PC, I run this script to continuously monitor completed sync actions of folders with "Pictures" in their name. 
+For example "Tom's Pictures" will be monitored but "Tom's AppBackups" will not. 
 
+To-Do (have to figure this part out yet, with rsync and mv commands): 
+When new photos are created in the phone /Picture folder, Syncthing will sync those to the PC.
+Then syncthing-backup.py will copy new/modified files to a backup location (not synced by Syncthing). 
+Lastly, it moves these files to the /Picture/archive folder, and syncs those changes back to the phone. 
 
-```
-      owntracks file  update     platform/ansible/templates/config.f
-           take file  update     configs/contacts/mac/.git/index
-           take file  metadata   configs/contacts/mac/ab.json
-           take file  update     playground/syncthing/events/requirements.txt
-           take file  update     playground/syncthing/events/syncthing-activity.py
-      on-github file  update     owntracks/recorder/Changelog
-           take dir   update     playground/syncthing/events/docs
-           take file  delete     playground/syncthing/events/menu
-```
+Tom, will now still be able to use/see his pictures, but whenever he runs out of storage, he can delete items in /Pictures/archive (or delete ../archives folder). 
 
-(This will change, and I'm open to suggestions.)
+Done:
+For debugging, logfile is created each time a folder with a specific name has completed syncing. 
