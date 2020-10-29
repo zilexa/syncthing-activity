@@ -65,12 +65,12 @@ def process(array, pat=None):
             # Continue if it this event is a successful file update operation.
             if event["data"]["action"] == "update" and event["data"]["error"]==None:
 
-              # Perform actions (log to file, rsync && mv).
+              
               # NOT WORKING: (Backup file if source file is newer or does not exist at destination).
               cp -u --preserve=timestamps "file_path" /mnt/pool/Collections/Pictures/Test/
               # NOT WORKING Move file to source/archive. 
               mv "file_path" "folder_path"/archive
-              # Logging
+              # WORKS Logging.
               logging.basicConfig(level=logging.DEBUG, filename="syncthing-backup.log", filemode="a+",
                           format="%(asctime)-15s %(levelname)-8s %(message)s")
               logging.info("{time:>20} {type:>10} {action:>10} {folder_label:>15} {folder_path:>50} {file_path:>50}".format(**e))
