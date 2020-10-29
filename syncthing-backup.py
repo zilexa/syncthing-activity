@@ -22,6 +22,7 @@ def getfolders(data):
     for f in data['folders']:
         folders[f["id"]] = {
             "label" : f["label"],
+            "path"  : f["path"],
         }
 
 def process(array, pat=None):
@@ -32,18 +33,23 @@ def process(array, pat=None):
 
 
     for event in array:
-        if "type" in event and event["type"] == "FolderCompletion":
+        if "type" in event and event["type"] == "ItemFinished":
             last_id = event["id"]
             
             folder_id = event["data"]["folder"]
             folder_label = folders[folder_id]["label"]
-            
+            folder_path = folders[folder_id]["path"]
+
+            path = os.path.join(folder_path, event["data"]["item"])
+
             e = {
                 "time"          : event["time"],
                 "type"          : event["type"],
-                "completion"    : event["data"]["completion"],
-                "device"        : event["data"]["device"],
+                "action"        : event["data"]["action"],
+                "error"         : event["data"]["error"],
+                "item"          : event["data"]["item"],
                 "folder_label"  : folder_label,
+                "path"          : path,
             }
             
             if pat:
@@ -51,10 +57,10 @@ def process(array, pat=None):
                 if not re.search(pat, s):
                     continue
                     
-            # print to logfile
-            logging.basicConfig(level=logging.DEBUG, filename="syncthing-backup.log", filemode="a+",
+            # Action here
+            logging.basicConfig(level=logging.DEBUG, filename="loggerfile", filemode="a+",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
-            logging.info("{time:>20} {type:>10} {completion:>5} {device:>15} {folder_label:>15}".format(**e))
+            logging.info("{time:>20} {type:>10} {action:>10} {folder_label:>15} {path:>50}".format(**e))
 
 def main(url, apikey, pat):
     headers = { "X-API-Key" : apikey }
@@ -67,7 +73,7 @@ def main(url, apikey, pat):
         params = {
             "since" : last_id,
             "limit" : 1,
-            "events" : "FolderCompletion",
+            "events" : "ItemFinished",
         }
 
         r = requests.get("{0}/rest/events".format(url), headers=headers, params=params)
