@@ -8,10 +8,10 @@ import os
 import re
 import logging
 
-__forked_by__ = "Zilexa"
-__original_author__    = "Jan-Piet Mens"
-__copyright__ = "Copyright 2019"
-__license__   = "GNU General Public License"
+__forked_by__       = "Zilexa"
+__original_author__ = "Jan-Piet Mens"
+__copyright__       = "Copyright 2019"
+__license__         = "GNU General Public License"
 
 last_id = 0
 folders = {}
@@ -53,7 +53,7 @@ def process(array, pat=None):
                 "item"          : event["data"]["item"],
                 "folder_label"  : folder_label,
                 "folder_path"   : folder_path,
-                "file_path"          : file_path,
+                "file_path"     : file_path,
             }
             
             # Probably required to check the attribute used at script execution (for example 'Photos') against folder label.
@@ -64,7 +64,6 @@ def process(array, pat=None):
                     
             # Continue if it this event is a successful file update operation.
             if event["data"]["action"] == "update" and event["data"]["error"]==None:
-
               
               # NOT WORKING: (Backup file if source file is newer or does not exist at destination).
               cp -u --preserve=timestamps "file_path" /mnt/pool/Collections/Pictures/Test/
